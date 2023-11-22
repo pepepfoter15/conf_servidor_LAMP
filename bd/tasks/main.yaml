@@ -1,2 +1,31 @@
 - name: cambiar la ruta por defecto
   shell: ip route delete default && ip route add default via 192.168.1.1 && echo "post-up route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.0 dev eth1" >> /etc/network/interfaces
+
+- name: "Install MariaDB"
+  apt:
+    name: mariadb-server
+    state: present
+
+- name: "Crear la base da datos"
+  mysql_db:
+    name: pepe  # Cambia "your_database_name" al nombre de tu base de datos deseada
+    state: present
+
+- name: "Crear el usuario"
+  mysql_user:
+    name: pepe  # Cambia "your_username" al nombre de usuario deseado
+    password: pepe  # Cambia "your_password" a la contraseña deseada
+    priv: '*.*:ALL'
+    host: '%'  # Permite acceso desde cualquier dirección IP
+
+- name: "Configuramos el bind address"
+  lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'  # Puede ser la IP específica si lo prefieres
+    state: present
+
+- name: "Reiniciamos el servicio de MariaDB "
+  service:
+    name: mariadb
+    state: restarted

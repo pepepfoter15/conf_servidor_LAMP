@@ -5,21 +5,48 @@
 - name: cambiar la ruta por defecto
   shell: ip route delete default && ip route add default via 192.168.1.1 && echo "post-up route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.0 dev eth1" >> /etc/network/interfaces
 
-- name: copy template index
-  template:
-    src: index.html
-    dest: /var/www/html/index.html
-    owner: www-data
-    group: www-data
-    mode: 0644
+- name: "Instalar Apache2 y mysql_client"
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apache2
+    - mysql_client
 
-- name: "Copiar fichero al servidor remoto"
+- name: "Crear el virtualhost"
+  template:
+    src: pepepracticaansible.conf  
+    dest: /etc/apache2/sites-available/pepepracticaansible.conf 
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: "Activar el virtualhost"
+  file:
+    src: /etc/apache2/sites-available/pepepracticaansible.conf 
+    dest: /etc/apache2/sites-enabled/pepepracticaansible.conf 
+    state: link
+
+- name: "Crear un directorio (file, status: directory)"
+  file:
+    path: /var/www/html  
+    state: directory
+
+- name: "Activar el módulo rewriter (apache2_modules)"
+  apache2_module:
+    name: rewrite
+    state: present
+
+- name: "Copiar index.html"
   copy:
-    src: index.html
+    src: /var/www/html/index.html  
     dest: /var/www/html/index.html
     owner: www-data
     group: www-data
     mode: '0644'
+
+- name: "Añadir una resolución estática"
+  command: "echo '192.168.1.1 www.pepepracticaansible.com' >> /etc/hosts" 
 
 - name: "Copiar fichero de configuración y reiniciar el servicio"
   copy:
