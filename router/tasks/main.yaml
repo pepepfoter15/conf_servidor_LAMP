@@ -1,0 +1,27 @@
+- name: Cambia el bit de forward a 1
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Configuracion de DNAT
+  iptables:
+    chain: PREROUTING
+    in_interface: eth1
+    destination_port: 80
+    jump: DNAT
+    protocol: tcp
+    table: nat
+    to_destination: 10.0.0.2:80
+  become: yes
+
+- name: Configuracion de SNAT
+  iptables:
+    chain: POSTROUTING
+    destination: 10.0.0.0/8
+    jump: MASQUERADE
+    out_interface: eth1
+    table: nat
+  become: yes

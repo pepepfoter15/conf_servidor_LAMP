@@ -1,1 +1,1 @@
-{"name":"debian/bookworm64","version":"12.20231009.1","provider":"libvirt","directory":"boxes/debian-VAGRANTSLASH-bookworm64/12.20231009.1/libvirt"}
+{"name":"debian/bullseye64","version":"11.20231009.1","provider":"libvirt","directory":"boxes/debian-VAGRANTSLASH-bullseye64/11.20231009.1/libvirt"}
