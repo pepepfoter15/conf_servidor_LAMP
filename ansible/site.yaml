@@ -1,4 +1,4 @@
-- hosts: redinterna
+- hosts: web, bd
   become: true
   roles:
    - role: redinterna

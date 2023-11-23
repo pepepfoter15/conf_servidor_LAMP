@@ -1,7 +1,8 @@
 - name: "Install MariaDB"
   apt:
-    name: mariadb-server
-    state: present
+    pkg:
+      - mariadb-server
+      - python3-mysqldb
 
 - name: "Crear la base da datos"
   mysql_db:

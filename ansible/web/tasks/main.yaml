@@ -8,7 +8,7 @@
 
 - name: "Crear el virtualhost"
   template:
-    src: pepepracticaansible.conf  
+    src: /etc/apache2/sites-available/pepepracticaansible.conf  
     dest: /etc/apache2/sites-available/pepepracticaansible.conf 
     owner: root
     group: root
@@ -43,10 +43,9 @@
 
 - name: "Copiar fichero de configuración y reiniciar el servicio"
   copy:
-    src: etc/apache2/ports.conf
+    src: /etc/apache2/ports.conf
     dest: /etc/apache2/ports.conf
     owner: root
     group: root
     mode: '0644'
   notify: restart apache2
-
