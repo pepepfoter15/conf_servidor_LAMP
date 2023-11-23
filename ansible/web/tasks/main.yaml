@@ -1,17 +1,10 @@
-- name: "ensure apache2 is installed"
-  apt:
-    pkg: apache2
-
-- name: cambiar la ruta por defecto
-  shell: ip route delete default && ip route add default via 192.168.1.1 && echo "post-up route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.0 dev eth1" >> /etc/network/interfaces
-
 - name: "Instalar Apache2 y mysql_client"
   apt:
     name: "{{ item }}"
     state: present
   with_items:
     - apache2
-    - mysql_client
+    - mariadb-client
 
 - name: "Crear el virtualhost"
   template:
@@ -56,3 +49,4 @@
     group: root
     mode: '0644'
   notify: restart apache2
+

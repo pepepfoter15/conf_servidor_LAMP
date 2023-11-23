@@ -6,7 +6,7 @@
     state: present
     reload: yes
 
-- name: Configuracion de DNAT
+- name: Configuración de DNAT
   iptables:
     chain: PREROUTING
     in_interface: eth1
@@ -14,14 +14,15 @@
     jump: DNAT
     protocol: tcp
     table: nat
+    match: "tcp"
     to_destination: 192.168.1.2:80
   become: yes
 
-- name: Configuracion de SNAT
+- name: Configuración de SNAT
   iptables:
     chain: POSTROUTING
-    destination: 192.168.1.0/24
-    jump: MASQUERADE
     out_interface: eth1
+    source: 192.168.1.0/24
+    jump: MASQUERADE
     table: nat
   become: yes

@@ -1,12 +1,17 @@
-- hosts: all
+- hosts: redinterna
   become: true
   roles:
-   - role: common
+   - role: redinterna
 
 - hosts: router
   become: true
   roles:
    - role: router
+
+- hosts: all
+  become: true
+  roles:
+   - role: common
 
 - hosts: web
   become: true
