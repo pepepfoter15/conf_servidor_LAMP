@@ -39,7 +39,7 @@
     mode: '0644'
 
 - name: "Añadir una resolución estática"
-  command: "echo '192.168.1.1 www.pepepracticaansible.com' >> /etc/hosts" 
+  command: "echo '192.168.1.2 www.pepepracticaansible.com' >> /etc/hosts" 
 
 - name: "Copiar fichero de configuración y reiniciar el servicio"
   copy:
