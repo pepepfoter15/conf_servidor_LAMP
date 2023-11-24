@@ -53,4 +53,16 @@ Vagrant.configure("2") do |config|
       :ip => "10.0.0.3", 
       :libvirt__forward_mode => "veryisolated"
   end
+
+  config.vm.define :cliente do |cliente|
+    cliente.vm.box = "debian/bullseye64"
+    cliente.vm.hostname = "cliente"
+    cliente.vm.synced_folder ".", "/vagrant", disabled: true
+
+    cliente.vm.network :private_network,
+      :libvirt__network_name => "red_intra",
+      :libvirt__dhcp_enabled => false,
+      :ip => "192.168.1.4", 
+      :libvirt__forward_mode => "veryisolated"
+  end
 end

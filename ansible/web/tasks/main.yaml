@@ -6,18 +6,32 @@
     - apache2
     - mariadb-client
 
-- name: "Crear el virtualhost"
+- name: "Crear el virtualhost web"
   template:
-    src: /etc/apache2/sites-available/pepepracticaansible.conf  
+    src: pepepracticaansible.conf  
     dest: /etc/apache2/sites-available/pepepracticaansible.conf 
     owner: root
     group: root
     mode: '0644'
 
-- name: "Activar el virtualhost"
+- name: "Activar el virtualhost web"
   file:
-    src: /etc/apache2/sites-available/pepepracticaansible.conf 
+    src: /etc/apache2/sites-available/pepepracticaansible.conf  
     dest: /etc/apache2/sites-enabled/pepepracticaansible.conf 
+    state: link
+
+- name: "Crear el virtualhost db"
+  template:
+    src: pepepracticaansible_bd.conf  
+    dest: /etc/apache2/sites-available/pepepracticaansible_bd.conf 
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: "Activar el virtualhost db"
+  file:
+    src: /etc/apache2/sites-available/pepepracticaansible_bd.conf  
+    dest: /etc/apache2/sites-enabled/pepepracticaansible_bd.conf 
     state: link
 
 - name: "Crear un directorio (file, status: directory)"
@@ -38,8 +52,17 @@
     group: www-data
     mode: '0644'
 
-- name: "Añadir una resolución estática"
-  command: "echo '192.168.1.2 www.pepepracticaansible.com' >> /etc/hosts" 
+- name: "Resolución estática web"
+  lineinfile:
+    path: /etc/hosts
+    line: '{{ip_interna_web}} www.pepepracticaansible.com'
+  become: yes
+
+- name: "Resolución estática bd"
+  lineinfile:
+    path: /etc/hosts
+    line: '{{ip_reddatos_bd}} bd.pepe.com'
+  become: yes
 
 - name: "Copiar fichero de configuración y reiniciar el servicio"
   copy:
